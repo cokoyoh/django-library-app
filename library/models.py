@@ -68,7 +68,7 @@ class BorrowedBook(models.Model):
     student = models.ForeignKey(Student, on_delete=models.PROTECT, related_name='borrows')
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     date_borrowed = models.DateField()
-    date_returned = models.DateField()
+    date_returned = models.DateField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, blank=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
 
