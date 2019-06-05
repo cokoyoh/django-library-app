@@ -31,6 +31,11 @@ class Genre(models.Model):
         return '{0}'.format(self.name)
 
 
+class BooksQuerySet(models.QuerySet):
+    def borrowed_books(self):
+        return self.filter(borrows__isnull=False)
+
+
 class Book(models.Model):
     isbn_number = models.CharField(max_length=45, unique=True)
     title = models.CharField(max_length=255)
@@ -38,6 +43,8 @@ class Book(models.Model):
     genre = models.ForeignKey(Genre, on_delete=models.PROTECT, related_name='books')
     created_at = models.DateTimeField(auto_now_add=True, blank=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
+
+    objects = BooksQuerySet.as_manager()
 
     class Meta:
         db_table = 'books'
