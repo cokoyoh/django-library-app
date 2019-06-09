@@ -21,5 +21,6 @@ from .views import welcome
 urlpatterns = [
     path('admin/', admin.site.urls),
     url('library/', include('library.urls')),
-    url(r'^$', welcome)
+    url(r'^$', welcome, name='welcome_page'),
+    path('accounts/', include('django.contrib.auth.urls'))
 ]
