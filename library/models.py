@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 
 class Student(models.Model):
@@ -54,6 +55,11 @@ class Book(models.Model):
         return '{0} - {1} By {2}'.format(self.isbn_number, self.title, self.author)
 
 
+class ReservationQuerySet(models.QuerySet):
+    def reserved_today(self):
+        return self.filter(created_at__date=date.today())
+
+
 class Reservation(models.Model):
     book = models.ForeignKey(Book, on_delete=models.PROTECT, related_name='reservations')
     student = models.ForeignKey(Student, on_delete=models.PROTECT, related_name='reservations')
@@ -61,6 +67,8 @@ class Reservation(models.Model):
     issued_at = models.DateTimeField(auto_now=True, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, blank=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
+
+    objects = ReservationQuerySet.as_manager()
 
     class Meta:
         db_table = 'book_reservations'
