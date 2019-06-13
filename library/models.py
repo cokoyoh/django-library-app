@@ -3,6 +3,15 @@ from django.contrib.auth.models import User
 from datetime import date
 
 
+# class StudentQuerySet(models.QuerySet):
+#     def with_email(self):
+#         return self.filter(email__isnull=True)
+
+class StudentManager(models.Manager):
+    def with_email(self):
+        return self.filter(email__isnull=False)
+
+
 class Student(models.Model):
     adm_number = models.IntegerField(unique=True)
     name = models.CharField(max_length=100)
@@ -10,6 +19,9 @@ class Student(models.Model):
     email = models.EmailField(max_length=255, unique=True, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
+
+    # objects = StudentQuerySet.as_manager()
+    objects = StudentManager()
 
     class Meta:
         db_table = 'students'
